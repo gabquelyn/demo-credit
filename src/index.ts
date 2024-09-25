@@ -4,6 +4,9 @@ import logger from "./middlewares/logger";
 import authRoutes from "./routes/authRotes";
 import errorHandler from "./middlewares/errorHandler";
 import cors from "cors";
+import dbConfig from "./utils/dbConfig";
+import path from "path";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 const app: Express = express();
@@ -23,9 +26,21 @@ app.use("/", (req: Request, res: Response) => {
   return res.status(200).json({ message: "Welcome to DemoCredit server" });
 });
 
+// parsers
+app.use(express.urlencoded({ extended: true }));
+app.use("/", express.static(path.join(__dirname, "public")));
+app.use(cookieParser());
+
 // to catch all errors forwarded by express-async-handler
 app.use(errorHandler);
-
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
+const startServer = async () => {
+  try {
+    await dbConfig();
+    app.listen(port, () => {
+      console.log(`Server running on port ${port}`);
+    });
+  } catch (err) {
+    console.log("Unable to start server", err);
+  }
+};
+startServer();
