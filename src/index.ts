@@ -6,6 +6,7 @@ import errorHandler from "./middlewares/errorHandler";
 import cors from "cors";
 import dbConfig from "./utils/dbConfig";
 import path from "path";
+import walletRouter from "./routes/walletRoutes";
 import cookieParser from "cookie-parser";
 
 dotenv.config();
@@ -20,6 +21,7 @@ app.use(cors());
 
 // for all auth routes
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/wallet", walletRouter);
 
 // to catch other routes or render documentation as required.
 app.use("/", (req: Request, res: Response) => {

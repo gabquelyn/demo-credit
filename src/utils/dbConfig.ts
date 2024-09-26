@@ -37,7 +37,7 @@ export default async () => {
     if (!(await db.schema.hasTable("users"))) {
       await db.schema.createTable("users", (table) => {
         table.increments("id").unsigned().unique();
-        table.string("email");
+        table.string("email").unique();
         table.string("name");
       });
     }
